@@ -2,130 +2,104 @@ package com.mironenko.task2_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputLayout;
+import com.mironenko.task2_android.Presenter.MyFragmentAdapter;
+import com.mironenko.task2_android.databinding.ActivityMainBinding;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
-    public final String LOG_TAG = "myTag";
+    public final String LOG_TAG = "myLog Activity";
+    public final String CURRENT_POSITION = "currentPosition";
+    public final String COLLECTION_SIZE = "collectionSize";
+    public final String KEY_TASKS_LIST_SIZE = "TasksListSize";
+    public final String KEY_TASKS_MAP_SIZE = "TasksMapSize";
+    private int collectionSize = 0;
+    private ActivityMainBinding binding;
+    private TextInputLayout input;
+    private Button btn_calculate;
+    private MyFragmentAdapter adapter;
+    private ViewPager2 pager2;
+    private TabLayout tabLayout;
+    private final Bundle bundleFragment = new Bundle();
 
-    private int collectionSize;
-
-    ViewGroup inputSize;
-    EditText editText;
-    Button button;
-    TabLayout tabLayout;
-    ViewPager2 pager2;
-    FragmentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "create Activity");
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        tabLayout = findViewById(R.id.tab_layout);
-        pager2 = findViewById(R.id.view_pager_2);
-        inputSize = (ViewGroup) findViewById(R.id.layout_input);
-        button = inputSize.findViewById(R.id.btn_Calculate);
-        editText = inputSize.findViewById(R.id.et_CollectionSize);
-
-        if (savedInstanceState != null) {
-            pager2.setAdapter(adapter);
-            pager2.setCurrentItem(savedInstanceState.getInt("currentPosition"));
-        }
+        btn_calculate = binding.includeInputLayout.btnCalculate;
+        tabLayout = binding.tabLayout;
+        pager2 = binding.viewPager2;
+        tabLayout.addOnTabSelectedListener(this);
+        btn_calculate.setOnClickListener(this);
 
         FragmentManager fm = getSupportFragmentManager();
-        adapter = new FragmentAdapter(fm, getLifecycle());
+        if (savedInstanceState != null) {
+            inputScreenGone();
+            pager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
+        }
+        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment);
         pager2.setAdapter(adapter);
-        inputSize.setVisibility(View.VISIBLE);
-        button.setOnClickListener(this);
-        editText.setOnEditorActionListener(this);
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                pager2.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
         pager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                super.onPageSelected(position);
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
+
     }
 
     @Override
     public void onClick(View v) {
-        String input = editText.getText().toString();
+        Log.d(LOG_TAG, "Button clicked");
+        String input = binding.includeInputLayout.texInputET.getText().toString();
         collectionSize = Integer.parseInt(input);
+        bundleFragment.putInt(COLLECTION_SIZE, collectionSize);
+        bundleFragment.putInt(KEY_TASKS_LIST_SIZE, Arrays.asList(MainActivity.this.getResources().getStringArray(R.array.array_tasksList)).size());
+        bundleFragment.putInt(KEY_TASKS_MAP_SIZE, Arrays.asList(MainActivity.this.getResources().getStringArray(R.array.array_tasksMap)).size());
         inputScreenGone();
+
     }
 
     @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        String input = editText.getText().toString();
-        collectionSize = Integer.parseInt(input);
-        inputScreenGone();
-        return false;
+    public void onTabSelected(TabLayout.Tab tab) {
+        pager2.setCurrentItem(tab.getPosition());
     }
 
-    class FragmentAdapter extends FragmentStateAdapter {
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
 
-        public FragmentAdapter(@NonNull @NotNull FragmentManager fragmentManager, @NonNull @NotNull Lifecycle lifecycle) {
-            super(fragmentManager, lifecycle);
-        }
+    }
 
-        @NonNull
-        @org.jetbrains.annotations.NotNull
-        @Override
-        public Fragment createFragment(int position) {
-            if (position == 1) {
-                return MapFragment.newInstance(collectionSize);
-            }
-            return CollectionFragment.newInstance(collectionSize);
-        }
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
 
-        @Override
-        public int getItemCount() {
-            return 2;
-        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle savedInstanceSave) {
+        super.onSaveInstanceState(savedInstanceSave);
+        int currentItem = pager2.getCurrentItem();
+        savedInstanceSave.putInt(CURRENT_POSITION, currentItem);
     }
 
     private void inputScreenGone() {
         pager2.setVisibility(View.VISIBLE);
-        inputSize.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull @NotNull Bundle savedInstanceSave) {
-        super.onSaveInstanceState(savedInstanceSave);
-        int currentItem = pager2.getCurrentItem();
-        savedInstanceSave.putInt("currentPosition", currentItem);
+        binding.includeInputLayout.layoutInput.setVisibility(View.GONE);
     }
 }

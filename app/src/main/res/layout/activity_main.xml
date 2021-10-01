@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,35 +16,40 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/collection">
+            android:text="@string/collections">
+
         </com.google.android.material.tabs.TabItem>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map">
-        </com.google.android.material.tabs.TabItem>
+            android:text="@string/maps" />
+
     </com.google.android.material.tabs.TabLayout>
 
-    <include layout="@layout/layout_input"
-        android:layout_width="match_parent"
-        android:layout_height="683dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tab_layout"
-        android:visibility="visible">
-    </include>
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager_2"
+        android:id="@+id/viewPager2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tab_layout"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
         android:visibility="gone">
 
     </androidx.viewpager2.widget.ViewPager2>
 
+    <include
+        layout="@layout/layout_input"
+        android:id="@+id/include_inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+
+    </include >
 
 </androidx.constraintlayout.widget.ConstraintLayout>

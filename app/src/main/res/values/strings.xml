@@ -1,22 +1,39 @@
 <resources>
-    <string name="app_name">Task2_Android</string>
-    <string name="calculate">CALCULATE</string>
+    <string name="app_name">My Application</string>
+    <string name="maps">Maps</string>
+    <string name="collections">Collections</string>
+    <string name="calculate">Calculate</string>
+    <string name="collection_size">Collection size</string>
     <string name="please_enter_collection_size_and_number_of_elements_to_compare">Please enter collection size and number of elements to compare</string>
-    <string name="collection_size">Collection Size</string>
-    <string name="adding_in_the_beginning">Adding in the beginning</string>
-    <string name="adding_in_the_middle">Adding in the middle</string>
-    <string name="adding_in_the_end">Adding in the end</string>
-    <string name="search_by_value">Search by value</string>
-    <string name="removing_in_the_beginning">Removing in the beginning</string>
-    <string name="removing_in_the_middle">Removing in the middle</string>
-    <string name="removing_in_the_end">Removing in the end</string>
-    <string name="clear">CLEAR</string>
-    <string name="arraylist">ArrayList</string>
-    <string name="linkedlist">LinkedList</string>
-    <string name="copy_on_write_arraylist">CopyOnWriteArrayList</string>
-    <string name="map">Map</string>
-    <string name="collection">Collection</string>
-    <string name="adding_new">Adding new</string>
-    <string name="search_by_key">Search by key</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="emptyString" />
+    <string name="clear">Clear</string>
+
+    <array name="array_lists">
+        <item>ArrayList</item>
+        <item>LinkedList</item>
+        <item>CopyOnWriteArrayList</item>
+    </array>
+
+    <array name="array_maps">
+        <item>HashMap</item>
+        <item>TreeMap</item>
+    </array>
+
+    <array name="array_tasksList">
+        <item>Adding in the beginning</item>
+        <item>Adding in the middle</item>
+        <item>Adding in the end</item>
+        <item>Search by value</item>
+        <item>Removing in the beginning</item>
+        <item>Removing in the middle</item>
+        <item>Removing in the end</item>
+    </array>
+
+    <array name="array_tasksMap">
+        <item>Adding new</item>
+        <item>Search by key</item>
+        <item>Removing</item>
+    </array>
+
 </resources>

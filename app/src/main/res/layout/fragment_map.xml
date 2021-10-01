@@ -4,223 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".MapFragment">
+    android:padding="5dp">
 
-    <TextView
-        android:id="@+id/tv_addingNew"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_mapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/adding_new"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/ll_add_beginning"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_addingNew"
-        android:baselineAligned="false">
-
-        <FrameLayout
-            android:id="@+id/fl_addingNewTreeMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/my_border">
-
-            <TextView
-                android:id="@+id/tv_addingNewTreeMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="" />
-
-            <ProgressBar
-                android:id="@+id/pb_addingNewTreeMap"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/purple_element" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/fl_addingNewHashMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/my_border">
-
-            <TextView
-                android:id="@+id/tv_addingNewHashMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="" />
-
-            <ProgressBar
-                android:id="@+id/pb_addingNewHashMap"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/purple_element" />
-
-        </FrameLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_searchByKey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/search_by_key"
-        app:layout_constraintTop_toBottomOf="@+id/ll_add_beginning">
-
-    </TextView>
-
-    <LinearLayout
-        android:id="@+id/ll_searchByKey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_searchByKey"
-        android:baselineAligned="false">
-
-        <FrameLayout
-            android:id="@+id/fl_searchByKeyTreeMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/my_border">
-
-            <TextView
-                android:id="@+id/tv_searchByKeyTreeMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="" />
-
-            <ProgressBar
-                android:id="@+id/pb_searchByKeyTreeMap"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/purple_element" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/fl_searchByKeyHashMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/my_border">
-
-            <TextView
-                android:id="@+id/tv_searchByKeyHashMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="" />
-
-            <ProgressBar
-                android:id="@+id/pb_searchByKeyHashMap"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/purple_element" />
-
-        </FrameLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_removing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/search_by_key"
-        app:layout_constraintTop_toBottomOf="@+id/ll_searchByKey">
-
-    </TextView>
-
-    <LinearLayout
-        android:id="@+id/ll_removing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_removing"
-        android:baselineAligned="false">
-
-        <FrameLayout
-            android:id="@+id/fl_removingTreeMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/my_border">
-
-            <TextView
-                android:id="@+id/tv_removingTreeMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="" />
-
-            <ProgressBar
-                android:id="@+id/pb_removingTreeMap"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/purple_element" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/fl_removingHashMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/my_border">
-
-            <TextView
-                android:id="@+id/tv_removingHashMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="" />
-
-            <ProgressBar
-                android:id="@+id/pb_removingHashMap"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/purple_element" />
-
-        </FrameLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_Clear"
-        android:layout_width="391dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/purple_element"
-        android:text="@string/clear"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_removing"
-        app:layout_constraintVertical_bias="0.044" />
+        app:layout_constraintTop_toTopOf="parent">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/clear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_mapFragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

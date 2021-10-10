@@ -6,6 +6,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,26 +16,21 @@ import android.widget.Button;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mironenko.task2_android.Presenter.MyFragmentAdapter;
+import com.mironenko.task2_android.Presenter.MyJob;
 import com.mironenko.task2_android.databinding.ActivityMainBinding;
-
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
     public final String LOG_TAG = "myLog Activity";
     public final String CURRENT_POSITION = "currentPosition";
     public final String COLLECTION_SIZE = "collectionSize";
-    public final String KEY_TASKS_LIST_SIZE = "TasksListSize";
-    public final String KEY_TASKS_MAP_SIZE = "TasksMapSize";
-    private int collectionSize = 0;
+    private String collectionSize;
     private ActivityMainBinding binding;
-    private TextInputLayout input;
     private Button btn_calculate;
     private MyFragmentAdapter adapter;
     private ViewPager2 pager2;
     private TabLayout tabLayout;
     private final Bundle bundleFragment = new Bundle();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             inputScreenGone();
             pager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
         }
-        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment);
+        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment);       //handleMain legacy
         pager2.setAdapter(adapter);
         pager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -67,11 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Log.d(LOG_TAG, "Button clicked");
-        String input = binding.includeInputLayout.texInputET.getText().toString();
-        collectionSize = Integer.parseInt(input);
-        bundleFragment.putInt(COLLECTION_SIZE, collectionSize);
-        bundleFragment.putInt(KEY_TASKS_LIST_SIZE, Arrays.asList(MainActivity.this.getResources().getStringArray(R.array.array_tasksList)).size());
-        bundleFragment.putInt(KEY_TASKS_MAP_SIZE, Arrays.asList(MainActivity.this.getResources().getStringArray(R.array.array_tasksMap)).size());
+        collectionSize = binding.includeInputLayout.texInputET.getText().toString();
+        bundleFragment.putString(COLLECTION_SIZE, collectionSize);
         inputScreenGone();
 
     }
@@ -99,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void inputScreenGone() {
-        pager2.setVisibility(View.VISIBLE);
         binding.includeInputLayout.layoutInput.setVisibility(View.GONE);
+        pager2.setVisibility(View.VISIBLE);
     }
 }

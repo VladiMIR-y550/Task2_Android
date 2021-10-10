@@ -30,8 +30,6 @@ public class MapFragment extends Fragment {
 
     private final int COLUMN_COUNT_MAP = 2;
 
-    private int numberTasksMap;
-
     private int collectionSize;
 
     private RecyclerView mapRecyclerView;
@@ -50,7 +48,6 @@ public class MapFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             collectionSize = getArguments().getInt(COLLECTION_SIZE);
-            numberTasksMap = getArguments().getInt(KEY_TASKS_MAP_SIZE);
         }
     }
 
@@ -67,15 +64,15 @@ public class MapFragment extends Fragment {
             }
         });
         mapRecyclerView.setLayoutManager(gridLayoutManager);
-        updateUI();
+//        updateUI();
         return view;
     }
 
-    private void updateUI() {
-        int itemCount = ROW_COUNT_MAP * COLUMN_COUNT_MAP + numberTasksMap;
-        ListLab listLab = ListLab.getListLab(collectionSize);
-        List<MyList> collections = listLab.getMyMaps();
-        mapAdapter = new RecyclerAdapter(collections, itemCount, FRAGMENT_INDEX, getContext());
-        mapRecyclerView.setAdapter(mapAdapter);
-    }
+//    private void updateUI() {
+//        int itemCount = ROW_COUNT_MAP * COLUMN_COUNT_MAP + 3;
+//        ListLab listLab = ListLab.getListLab(collectionSize);
+//        List<MyList> collections = listLab.getMyMaps();
+//        mapAdapter = new RecyclerAdapter(collections, itemCount, FRAGMENT_INDEX, getContext());
+//        mapRecyclerView.setAdapter(mapAdapter);
+//    }
 }

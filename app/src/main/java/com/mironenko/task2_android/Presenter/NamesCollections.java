@@ -1,19 +1,19 @@
 package com.mironenko.task2_android.Presenter;
 
+import com.mironenko.task2_android.R;
+
 public enum NamesCollections {
-    ARRAY_LIST("ArrayList"),
-    LINKED_LIST("LinkedList"),
-    COPY_ON_WRITE_ARRAY_LIST("CopyOnWriteArrayList"),
-    TREE_MAP("TreeMap"),
-    HASH_MAP("HashMap");
+    ARRAY_LIST(R.string.array_list),
+    LINKED_LIST(R.string.linked_list),
+    COPY_ON_WRITE_ARRAY_LIST(R.string.copy_on_write_array_list);
 
-    private final String titleName;
+    private final int titleName;
 
-    NamesCollections(String titleName) {
+    NamesCollections(int titleName) {
         this.titleName = titleName;
     }
 
-    public String getTitleName() {
+    public int getTitleName() {
         return titleName;
     }
 }

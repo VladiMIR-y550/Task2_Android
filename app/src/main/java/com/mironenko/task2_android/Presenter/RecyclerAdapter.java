@@ -1,6 +1,5 @@
 package com.mironenko.task2_android.Presenter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.mironenko.task2_android.Model.MyList;
 import com.mironenko.task2_android.R;
-import java.util.Arrays;
+
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerHolder> {
@@ -25,16 +24,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerHolder> {
 
     private final List<MyList> collections;
 
-    private final List<String> titlesList;
-
-    private final List<String> titlesMap;
-
-    public RecyclerAdapter(List<MyList> myCollections, int itemCount, int fragment_index, Context context) {
+    public RecyclerAdapter(List<MyList> myCollections, int itemCount, int fragment_index) {
         this.ITEM_COUNT = itemCount;
         this.FRAGMENT_INDEX = fragment_index;
         this.collections = myCollections;
-        this.titlesList = Arrays.asList(context.getResources().getStringArray(R.array.array_tasksList));
-        this.titlesMap = Arrays.asList(context.getResources().getStringArray(R.array.array_tasksMap));
         this.NUMBER_HOLDER_FOR_ONE_TASK = checkFragment(fragment_index);
     }
 
@@ -69,9 +62,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerHolder> {
                 break;
             case TYPE_ITEM2:
                 if (FRAGMENT_INDEX == 0) {
-                    checkPositionFromBind(holder, position, titlesList);
+                    checkPositionFromBind(holder, position, TasksList.values());
                 } else if (FRAGMENT_INDEX == 1) {
-                    checkPositionFromBind(holder, position, titlesMap);
+//                    checkPositionFromBind(holder, position, titlesMap);
                 }
                 break;
 
@@ -80,11 +73,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerHolder> {
         }
     }
 
-    private void checkPositionFromBind(RecyclerHolder holder, int position, List<String> titles) {
+    private void checkPositionFromBind(RecyclerHolder holder, int position, TasksList[] tasksLists) {
         if (position == 0) {
-            holder.bind(titles.get(position));
+            holder.bind(tasksLists[position].getTitleName());
         } else {
-            holder.bind(titles.get((position) / NUMBER_HOLDER_FOR_ONE_TASK));
+            holder.bind(tasksLists[position / NUMBER_HOLDER_FOR_ONE_TASK].getTitleName());
         }
     }
 

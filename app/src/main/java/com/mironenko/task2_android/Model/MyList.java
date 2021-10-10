@@ -5,24 +5,20 @@ import android.util.Log;
 import com.mironenko.task2_android.Presenter.NamesCollections;
 import com.mironenko.task2_android.Presenter.TasksList;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MyList {
 
     public final String LOG_TAG = "myList TAG";
 
-    private final String nameItem;
+    private final int nameItem;
 
     private final NamesCollections namesCollections;
 
     private final TasksList task;
-
-    private final int collectionSize;
 
     private String timeComplete;
 
@@ -30,32 +26,37 @@ public class MyList {
 
     private Map<String, Integer> testMap;
 
-    public MyList(NamesCollections namesCollections, TasksList task, int collectionSize, List<Integer> basicList, Map<String, Integer> basicMap) {
+    public MyList(NamesCollections namesCollections, TasksList task) {
         this.namesCollections = namesCollections;
         this.task = task;
         this.nameItem = namesCollections.getTitleName();
-        this.collectionSize = collectionSize;
-        createCollectionForTest(namesCollections, basicList, basicMap);
+//        createCollectionForTest(namesCollections, basicList, basicMap);
+    }
+    public String getTimeComplete() {
+        return timeComplete;
     }
 
-    public String getNameItem() {
+    public int getNameItem() {
         return nameItem;
     }
 
-    public String startCalculate() {
-        long result;
-        String resultToString;
+    public TasksList getTask() {
+        return task;
+    }
 
+    public long startCalculate(List<Integer> basicList) {
+        long result;
+        createCollectionForTest(namesCollections, basicList);
         long before = System.currentTimeMillis();
         choseTask(task);
         long after = System.currentTimeMillis();
         result = after - before;
-        resultToString = Long.toString(result);
-        timeComplete = resultToString;
-        return resultToString;
+        timeComplete = Long.toString(result);;
+
+        return result;
     }
 
-    private void createCollectionForTest(NamesCollections nameCollection, List<Integer> basicList, Map<String, Integer> basicMap) {
+    private void createCollectionForTest(NamesCollections nameCollection, List<Integer> basicList) {
         switch (nameCollection) {
             case ARRAY_LIST:
                 testCollection = new ArrayList<>(basicList);
@@ -63,10 +64,10 @@ public class MyList {
                 testCollection = new LinkedList<>(basicList);
             case COPY_ON_WRITE_ARRAY_LIST:
                 testCollection = new CopyOnWriteArrayList<>(basicList);
-            case TREE_MAP:
-                testMap = new TreeMap<>(basicMap);
-            case HASH_MAP:
-                testMap = new HashMap<>(basicMap);
+//            case TREE_MAP:
+//                testMap = new TreeMap<>(basicMap);
+//            case HASH_MAP:
+//                testMap = new HashMap<>(basicMap);
         }
     }
 
@@ -95,15 +96,15 @@ public class MyList {
             case REMOVING_IN_THE_END:
                 testCollection.remove(testCollection.size() - 1);
                 break;
-            case ADDING_NEW:
-                testMap.put("key" + (collectionSize + 1), value);
-                break;
-            case SEARCH_BY_KEY:
-                testMap.get("key1");
-                break;
-            case REMOVING:
-                testMap.remove("key1");
-                break;
+//            case ADDING_NEW:
+//                testMap.put("key" + (collectionSize + 1), value);
+//                break;
+//            case SEARCH_BY_KEY:
+//                testMap.get("key1");
+//                break;
+//            case REMOVING:
+//                testMap.remove("key1");
+//                break;
             default:
                 break;
         }

@@ -9,6 +9,18 @@
     <string name="emptyString" />
     <string name="clear">Clear</string>
 
+    <string name="array_list">ArrayList</string>
+    <string name="linked_list">LinkedList</string>
+    <string name="copy_on_write_array_list">CopyOnWriteArrayList</string>
+
+    <string name="adding_in_the_beginning">Adding in the beginning</string>
+    <string name="adding_in_the_middle">Adding in the middle</string>
+    <string name="adding_in_the_end">Adding in the end</string>
+    <string name="search_by_value">Search by value</string>
+    <string name="removing_in_the_beginning">Removing in the beginning</string>
+    <string name="removing_in_the_middle">Removing in the middle</string>
+    <string name="removing_in_the_end">Removing in the end</string>
+
     <array name="array_lists">
         <item>ArrayList</item>
         <item>LinkedList</item>
@@ -21,13 +33,9 @@
     </array>
 
     <array name="array_tasksList">
-        <item>Adding in the beginning</item>
-        <item>Adding in the middle</item>
-        <item>Adding in the end</item>
-        <item>Search by value</item>
-        <item>Removing in the beginning</item>
-        <item>Removing in the middle</item>
-        <item>Removing in the end</item>
+
+        <item>c</item>
+
     </array>
 
     <array name="array_tasksMap">

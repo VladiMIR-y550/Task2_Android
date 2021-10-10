@@ -11,7 +11,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class MyFragmentAdapter extends FragmentStateAdapter {
     public static final String LOG_TAG = "My Fragment Adapter";
-    Bundle bundle = new Bundle();
+    Bundle bundle;
 
     public MyFragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, Bundle bundleFragment) {
         super(fragmentManager, lifecycle);

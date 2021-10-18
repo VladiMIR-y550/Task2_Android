@@ -6,18 +6,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
-import com.mironenko.task2_android.Presenter.MyFragmentAdapter;
-import com.mironenko.task2_android.Presenter.MyJob;
+import com.mironenko.task2_android.MyFragmentAdapter;
 import com.mironenko.task2_android.databinding.ActivityMainBinding;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
@@ -26,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public final String COLLECTION_SIZE = "collectionSize";
     private String collectionSize;
     private ActivityMainBinding binding;
+    private TextInputLayout input;
     private Button btn_calculate;
     private MyFragmentAdapter adapter;
     private ViewPager2 pager2;
@@ -46,11 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_calculate.setOnClickListener(this);
 
         FragmentManager fm = getSupportFragmentManager();
+
         if (savedInstanceState != null) {
             inputScreenGone();
             pager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
         }
-        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment);       //handleMain legacy
+        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment);
         pager2.setAdapter(adapter);
         pager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -59,16 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tabLayout.selectTab(tabLayout.getTabAt(position));
             }
         });
-
     }
 
     @Override
     public void onClick(View v) {
         Log.d(LOG_TAG, "Button clicked");
-        collectionSize = binding.includeInputLayout.texInputET.getText().toString();
+        collectionSize = String.valueOf(binding.includeInputLayout.texInputET.getText());
         bundleFragment.putString(COLLECTION_SIZE, collectionSize);
         inputScreenGone();
-
     }
 
     @Override
@@ -78,12 +75,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     @Override

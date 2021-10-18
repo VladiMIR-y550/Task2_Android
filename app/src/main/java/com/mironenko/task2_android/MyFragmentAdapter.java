@@ -1,4 +1,4 @@
-package com.mironenko.task2_android.Presenter;
+package com.mironenko.task2_android;
 
 import android.os.Bundle;
 import android.util.Log;

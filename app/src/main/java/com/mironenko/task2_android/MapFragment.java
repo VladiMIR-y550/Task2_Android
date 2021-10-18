@@ -1,6 +1,6 @@
+package com.mironenko.task2_android;
 
-package com.mironenko.task2_android.Presenter;
-
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,11 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.mironenko.task2_android.Model.ListLab;
-import com.mironenko.task2_android.Model.MyList;
-import com.mironenko.task2_android.R;
 
-import java.util.List;
+import com.mironenko.task2_android.R;
+import com.mironenko.task2_android.databinding.ActivityMainBinding;
+
 
 public class MapFragment extends Fragment {
 
@@ -32,9 +31,6 @@ public class MapFragment extends Fragment {
 
     private int collectionSize;
 
-    private RecyclerView mapRecyclerView;
-
-    private RecyclerAdapter mapAdapter;
 
     public static MapFragment newInstance(Bundle args) {
         MapFragment fragment = new MapFragment();
@@ -55,24 +51,15 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        mapRecyclerView = (RecyclerView) view.findViewById(R.id.rv_mapFragment);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return (position % 3 == 0 ? 2 : 1);
-            }
-        });
-        mapRecyclerView.setLayoutManager(gridLayoutManager);
 //        updateUI();
         return view;
     }
 
-//    private void updateUI() {
-//        int itemCount = ROW_COUNT_MAP * COLUMN_COUNT_MAP + 3;
+    private void updateUI() {
+        int itemCount = ROW_COUNT_MAP * COLUMN_COUNT_MAP + 3;
 //        ListLab listLab = ListLab.getListLab(collectionSize);
 //        List<MyList> collections = listLab.getMyMaps();
 //        mapAdapter = new RecyclerAdapter(collections, itemCount, FRAGMENT_INDEX, getContext());
 //        mapRecyclerView.setAdapter(mapAdapter);
-//    }
+    }
 }

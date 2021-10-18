@@ -1,4 +1,4 @@
-package com.mironenko.task2_android.Presenter;
+package com.mironenko.task2_android;
 
 import com.mironenko.task2_android.R;
 

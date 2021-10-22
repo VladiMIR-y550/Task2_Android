@@ -7,23 +7,30 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mironenko.task2_android.MyFragmentAdapter;
 import com.mironenko.task2_android.databinding.ActivityMainBinding;
 
+import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        TabLayout.OnTabSelectedListener,
+        TextView.OnEditorActionListener {
 
     public final String LOG_TAG = "myLog Activity";
     public final String CURRENT_POSITION = "currentPosition";
     public final String COLLECTION_SIZE = "collectionSize";
     private String collectionSize;
     private ActivityMainBinding binding;
-    private TextInputLayout input;
+    private TextInputEditText input;
     private Button btn_calculate;
     private MyFragmentAdapter adapter;
     private ViewPager2 pager2;
@@ -40,8 +47,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_calculate = binding.includeInputLayout.btnCalculate;
         tabLayout = binding.tabLayout;
         pager2 = binding.viewPager2;
+        input = binding.includeInputLayout.texInputET;
         tabLayout.addOnTabSelectedListener(this);
         btn_calculate.setOnClickListener(this);
+        input.setOnEditorActionListener(this);
+
 
         FragmentManager fm = getSupportFragmentManager();
 
@@ -63,8 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Log.d(LOG_TAG, "Button clicked");
-        collectionSize = String.valueOf(binding.includeInputLayout.texInputET.getText());
-        bundleFragment.putString(COLLECTION_SIZE, collectionSize);
+        inputProcessing(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
         inputScreenGone();
     }
 
@@ -88,8 +97,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         savedInstanceSave.putInt(CURRENT_POSITION, currentItem);
     }
 
+    private void inputProcessing(String inputString) {
+        collectionSize = String.valueOf(inputString);
+        bundleFragment.putString(COLLECTION_SIZE, collectionSize);
+        inputScreenGone();
+    }
+
     private void inputScreenGone() {
         binding.includeInputLayout.layoutInput.setVisibility(View.GONE);
         pager2.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        inputProcessing(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
+        return false;
     }
 }

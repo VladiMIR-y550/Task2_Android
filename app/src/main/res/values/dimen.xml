@@ -2,4 +2,5 @@
 <resources>
     <dimen name="cellHeight">60dp</dimen>
     <dimen name="cellWidth">120dp</dimen>
+    <dimen name="layoutPadding">15dp</dimen>
 </resources>

@@ -12,7 +12,7 @@ public class Calculator {
 
     private static final String LOG_TAG = "MyCalculator";
     private static Calculator calculator;
-    private Handler handler;
+    private final Handler handler;
     private final List<DataCell> dataCellList;
 
     private Calculator(List<DataCell> dataCellList, Handler handler) {
@@ -32,16 +32,17 @@ public class Calculator {
         for (DataCell dataCell : dataCellList) {
             new Thread(new Runnable() {
                 Message msg;
+
                 @Override
                 public void run() {
                     Log.d(LOG_TAG, "Thread start = " + Thread.currentThread().getName());
                     long result = startCalculate(dataCell);
                     dataCell.setTimeComplete(result);
-                    Log.d(LOG_TAG, "" + Thread.currentThread().getName() + " CollectionName " + dataCell.getNamesCollections() + " Task " + dataCell.getTask() + " Result = " + String.valueOf(result));
+                    Log.d(LOG_TAG, "" + Thread.currentThread().getName() + " CollectionName " + dataCell.getNamesCollections() + " Task " + dataCell.getTask() + " Result = " + result);
                     msg = Message.obtain();
                     msg.what = MSG_SHOW_RESULT;
                     msg.obj = dataCell;
-                    handler.sendMessage(msg);
+                    handler.sendMessageDelayed(msg, dataCell.getTimeComplete() * 20);
                 }
             }).start();
         }

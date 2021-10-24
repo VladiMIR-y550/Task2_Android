@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/layoutPadding">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/adding_in_the_beginning" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="horizontal">
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_arrayList_addingBegin"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/array_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_linkedList_addingBegin"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cellHint="@string/linked_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_copyOnWrite_addingBegin"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/copy_on_write_array_list" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/adding_in_the_middle"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="horizontal">
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_arrayList_addingMiddle"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/array_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_linkedList_addingMiddle"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cellHint="@string/linked_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_copyOnWrite_addingMiddle"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/copy_on_write_array_list" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/adding_in_the_end"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="horizontal">
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_arrayList_addingEnd"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/array_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_linkedList_addingEnd"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cellHint="@string/linked_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_copyOnWrite_addingEnd"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/copy_on_write_array_list" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/search_by_value"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="horizontal">
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_arrayList_searchValue"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/array_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_linkedList_searchValue"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cellHint="@string/linked_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_copyOnWrite_searchValue"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/copy_on_write_array_list" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/removing_in_the_beginning"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="horizontal">
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_arrayList_removeBegin"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/array_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_linkedList_removeBegin"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cellHint="@string/linked_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_copyOnWrite_removeBegin"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/copy_on_write_array_list" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/removing_in_the_middle"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="horizontal">
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_arrayList_removeMiddle"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/array_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_linkedList_removeMiddle"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cellHint="@string/linked_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_copyOnWrite_removeMiddle"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/copy_on_write_array_list" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/removing_in_the_end"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:orientation="horizontal">
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_arrayList_removeEnd"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/array_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_linkedList_removeEnd"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    app:cellHint="@string/linked_list" />
+
+                <com.mironenko.task2_android.CellView
+                    android:id="@+id/cell_copyOnWrite_removeEnd"
+                    android:layout_width="@dimen/cellWidth"
+                    android:layout_height="@dimen/cellHeight"
+                    android:layout_weight="1"
+                    app:cellHint="@string/copy_on_write_array_list" />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="5dp"
+                android:text="@string/clear"></Button>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

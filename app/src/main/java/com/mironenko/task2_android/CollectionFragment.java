@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mironenko.task2_android.databinding.FragmentCollectionBinding;
+
 import java.util.List;
 
 public class CollectionFragment extends Fragment {
@@ -24,7 +26,9 @@ public class CollectionFragment extends Fragment {
     private Calculator calculator;
     private String collectionSize;
     List<DataCell> dataCellList;
-    View parentView;
+    private FragmentCollectionBinding bindingCollection;
+
+    private View parentView;
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -61,7 +65,8 @@ public class CollectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_collection, container, false);
+        bindingCollection = FragmentCollectionBinding.inflate(inflater, container, false);
+        View view = bindingCollection.getRoot();
         parentView = view;
         updateUI();
         return view;

@@ -26,12 +26,26 @@ public class CellView extends FrameLayout {
 
     public CellView(@NonNull Context context) {
         super(context);
-        initView(context);
+        initView(context, null);
     }
 
     public CellView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
+        initView(context, attrs);
+
+    }
+
+    public CellView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView(context, attrs);
+    }
+
+    private void initView(Context context, AttributeSet attrs) {
+        View view = ((Activity) context).getLayoutInflater().inflate(R.layout.layout_item, null, false);
+        progressBar = view.findViewById(R.id.progress_circular);
+        textInputLayout = view.findViewById(R.id.til_progressItem);
+        textInputEditText = view.findViewById(R.id.et_progress_item);
+        this.addView(view);
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CellView);
             try {
@@ -45,19 +59,6 @@ public class CellView extends FrameLayout {
                 typedArray.recycle();
             }
         }
-    }
-
-    public CellView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initView(context);
-    }
-
-    private void initView(Context context) {
-        View view = ((Activity) context).getLayoutInflater().inflate(R.layout.layout_item, null, false);
-        progressBar = view.findViewById(R.id.progress_circular);
-        textInputLayout = view.findViewById(R.id.til_progressItem);
-        textInputEditText = view.findViewById(R.id.et_progress_item);
-        this.addView(view);
     }
 
     private void setProgressVisible(int visible) {
@@ -76,6 +77,11 @@ public class CellView extends FrameLayout {
         }
     }
 
+    /**
+     * setText используется для записи в ячейку либо пустого значения - для поднятия hint в верх,
+     * либо результата из параметров.
+     * @param result
+     */
     private void setResult(String result) {
         if (result == null) {
             textInputEditText.setText(" ");
@@ -86,8 +92,15 @@ public class CellView extends FrameLayout {
     }
 
     public void showResult(DataCell dataCell) {
+        String result;
         setProgressVisible(CELL_GONE);
-        setResult(String.valueOf(dataCell.getTimeComplete()));
+        result = String.valueOf(dataCell.getTimeComplete());
+        textInputEditText.setText(result);
+        this.invalidate();
         Log.d(LOG_TAG, "result = " + dataCell.getTimeComplete());
+    }
+
+    public void showProgress(DataCell dataCell) {
+        setProgressVisible(CELL_VISIBLE);
     }
 }

@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.mironenko.task2_android.databinding.FragmentCollectionBinding;
+
 import java.util.List;
 
 public class Calculator {
@@ -19,6 +21,7 @@ public class Calculator {
         this.dataCellList = dataCellList;
         this.handler = handler;
     }
+    //Calculator.getInstance()
 
     public static Calculator getInitialCalculator(List<DataCell> dataCellList, Handler handler) {
         if (calculator == null) {
@@ -38,11 +41,13 @@ public class Calculator {
                     Log.d(LOG_TAG, "Thread start = " + Thread.currentThread().getName());
                     long result = startCalculate(dataCell);
                     dataCell.setTimeComplete(result);
-                    Log.d(LOG_TAG, "" + Thread.currentThread().getName() + " CollectionName " + dataCell.getNamesCollections() + " Task " + dataCell.getTask() + " Result = " + result);
+                    Log.d(LOG_TAG, "" + Thread.currentThread().getName() + " CollectionName "
+                            + dataCell.getNamesCollections() + " Task "
+                            + dataCell.getTask() + " Result = " + result);
                     msg = Message.obtain();
                     msg.what = MSG_SHOW_RESULT;
                     msg.obj = dataCell;
-                    handler.sendMessageDelayed(msg, dataCell.getTimeComplete() * 20);
+                    handler.sendMessage(msg);
                 }
             }).start();
         }
@@ -51,6 +56,11 @@ public class Calculator {
     private long startCalculate(DataCell dataCell) {
         long before = System.currentTimeMillis();
         startTask(dataCell);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         long after = System.currentTimeMillis();
         return after - before;
     }

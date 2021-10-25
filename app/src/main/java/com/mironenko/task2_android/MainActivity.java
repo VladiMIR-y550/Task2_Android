@@ -30,11 +30,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public final String COLLECTION_SIZE = "collectionSize";
     private String collectionSize;
     private ActivityMainBinding binding;
-    private TextInputEditText input;
-    private Button btn_calculate;
+//    private TextInputEditText input;
+//    private Button btn_calculate;
     private MyFragmentAdapter adapter;
-    private ViewPager2 pager2;
-    private TabLayout tabLayout;
+//    private ViewPager2 pager2;
+//    private TabLayout tabLayout;
     private final Bundle bundleFragment = new Bundle();
 
     @Override
@@ -44,28 +44,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View view = binding.getRoot();
         setContentView(view);
 
-        btn_calculate = binding.includeInputLayout.btnCalculate;
-        tabLayout = binding.tabLayout;
-        pager2 = binding.viewPager2;
-        input = binding.includeInputLayout.texInputET;
-        tabLayout.addOnTabSelectedListener(this);
-        btn_calculate.setOnClickListener(this);
-        input.setOnEditorActionListener(this);
+//        btn_calculate = binding.includeInputLayout.btnCalculate;
+//        tabLayout = binding.tabLayout;
+//        pager2 = binding.viewPager2;
+//        input = binding.includeInputLayout.texInputET;
+        binding.tabLayout.addOnTabSelectedListener(this);
+        binding.includeInputLayout.btnCalculate.setOnClickListener(this);
+        binding.includeInputLayout.texInputET.setOnEditorActionListener(this);
 
 
         FragmentManager fm = getSupportFragmentManager();
 
         if (savedInstanceState != null) {
             inputScreenGone();
-            pager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
+            binding.viewPager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
         }
         adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment);
-        pager2.setAdapter(adapter);
-        pager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewPager2.setAdapter(adapter);
+        binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                tabLayout.selectTab(tabLayout.getTabAt(position));
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position));
             }
         });
     }
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        pager2.setCurrentItem(tab.getPosition());
+        binding.viewPager2.setCurrentItem(tab.getPosition());
     }
 
     @Override
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle savedInstanceSave) {
         super.onSaveInstanceState(savedInstanceSave);
-        int currentItem = pager2.getCurrentItem();
+        int currentItem = binding.viewPager2.getCurrentItem();
         savedInstanceSave.putInt(CURRENT_POSITION, currentItem);
     }
 
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void inputScreenGone() {
         binding.includeInputLayout.layoutInput.setVisibility(View.GONE);
-        pager2.setVisibility(View.VISIBLE);
+        binding.viewPager2.setVisibility(View.VISIBLE);
     }
 
     @Override

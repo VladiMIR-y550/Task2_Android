@@ -67,6 +67,7 @@ public class CollectionFragment extends Fragment {
                              Bundle savedInstanceState) {
         bindingCollection = FragmentCollectionBinding.inflate(inflater, container, false);
         View view = bindingCollection.getRoot();
+
         parentView = view;
         updateUI();
         return view;
@@ -80,5 +81,11 @@ public class CollectionFragment extends Fragment {
 
     private CellView findCellViewById(int cellViewId) {
         return parentView.findViewById(cellViewId);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bindingCollection = null;
     }
 }

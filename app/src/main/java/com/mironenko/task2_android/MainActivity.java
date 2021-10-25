@@ -30,11 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public final String COLLECTION_SIZE = "collectionSize";
     private String collectionSize;
     private ActivityMainBinding binding;
-//    private TextInputEditText input;
-//    private Button btn_calculate;
     private MyFragmentAdapter adapter;
-//    private ViewPager2 pager2;
-//    private TabLayout tabLayout;
     private final Bundle bundleFragment = new Bundle();
 
     @Override
@@ -43,15 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-//        btn_calculate = binding.includeInputLayout.btnCalculate;
-//        tabLayout = binding.tabLayout;
-//        pager2 = binding.viewPager2;
-//        input = binding.includeInputLayout.texInputET;
         binding.tabLayout.addOnTabSelectedListener(this);
         binding.includeInputLayout.btnCalculate.setOnClickListener(this);
         binding.includeInputLayout.texInputET.setOnEditorActionListener(this);
-
 
         FragmentManager fm = getSupportFragmentManager();
 
@@ -112,5 +102,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         inputProcessing(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

@@ -49,7 +49,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout">
-
     </include >
+
+    <include layout="@layout/layout_progress_focusable"
+        android:id="@+id/pb_calculate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        >
+    </include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,17 +2,12 @@
 <resources>
     <declare-styleable name="CellView">
         <attr name="cellHint" format="string">
-
         </attr>
 
         <attr name="cellText" format="string">
-
         </attr>
 
-        <attr name="cellVisibility" format="integer">
-            <enum name="visible" value="0"/>
-            <enum name="invisible" value="1"/>
-            <enum name="gone" value="2"/>
+        <attr name="cellVisibility" format="boolean">
         </attr>
     </declare-styleable>
 

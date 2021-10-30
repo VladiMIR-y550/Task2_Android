@@ -1,14 +1,11 @@
 package com.mironenko.task2_android;
 
-import static com.mironenko.task2_android.CollectionFragment.MSG_SHOW_RESULT;
-
 import android.os.Handler;
-import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 
-import com.mironenko.task2_android.databinding.FragmentCollectionBinding;
-
 import java.util.List;
+import java.util.Map;
 
 public class Calculator {
 
@@ -16,16 +13,17 @@ public class Calculator {
     private static Calculator calculator;
     private final Handler handler;
     private final List<DataCell> dataCellList;
+    private final Map<CellViewKeys, CellView> cellViewMap;
 
-    private Calculator(List<DataCell> dataCellList, Handler handler) {
+    private Calculator(List<DataCell> dataCellList, Handler handler, Map<CellViewKeys, CellView> cellViewMap) {
         this.dataCellList = dataCellList;
         this.handler = handler;
+        this.cellViewMap = cellViewMap;
     }
-    //Calculator.getInstance()
 
-    public static Calculator getInitialCalculator(List<DataCell> dataCellList, Handler handler) {
+    public static Calculator getInstance(List<DataCell> dataCellList, Handler handler, Map<CellViewKeys, CellView> cellViewMap) {
         if (calculator == null) {
-            calculator = new Calculator(dataCellList, handler);
+            calculator = new Calculator(dataCellList, handler, cellViewMap);
         }
         return calculator;
     }
@@ -33,35 +31,22 @@ public class Calculator {
     public void calculate() {
         Log.d(LOG_TAG, "DataListCell size" + dataCellList.size());
         for (DataCell dataCell : dataCellList) {
-            new Thread(new Runnable() {
-                Message msg;
-
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, "Thread start = " + Thread.currentThread().getName());
-                    long result = startCalculate(dataCell);
-                    dataCell.setTimeComplete(result);
-                    Log.d(LOG_TAG, "" + Thread.currentThread().getName() + " CollectionName "
-                            + dataCell.getNamesCollections() + " Task "
-                            + dataCell.getTask() + " Result = " + result);
-                    msg = Message.obtain();
-                    msg.what = MSG_SHOW_RESULT;
-                    msg.obj = dataCell;
-                    handler.sendMessage(msg);
-                }
-            }).start();
+            MyJob myJob = new MyJob(handler, dataCell, calculator);
+            myJob.start();
         }
     }
 
-    private long startCalculate(DataCell dataCell) {
-        long before = System.currentTimeMillis();
+    public long startCalculate(DataCell dataCell) {
+        long before = SystemClock.currentThreadTimeMillis();
+
         startTask(dataCell);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        long after = System.currentTimeMillis();
+        long after = SystemClock.currentThreadTimeMillis();
+
         return after - before;
     }
 

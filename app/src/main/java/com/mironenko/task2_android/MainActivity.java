@@ -1,37 +1,60 @@
 package com.mironenko.task2_android;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.mironenko.task2_android.MyFragmentAdapter;
 import com.mironenko.task2_android.databinding.ActivityMainBinding;
 
 import java.util.Objects;
-
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         TabLayout.OnTabSelectedListener,
         TextView.OnEditorActionListener {
 
+    private static final String KEY_PROGRESS_VISIBLE = "progressVisible";
     public final String LOG_TAG = "myLog Activity";
     public final String CURRENT_POSITION = "currentPosition";
-    public final String COLLECTION_SIZE = "collectionSize";
-    private String collectionSize;
+    public static final String COLLECTION_SIZE = "collectionSize";
+    public static final int MSG_INITIAL_BASIC_COLLECTION = 0;
+    private static final int MSG_SHOW_RESULT = 1;
+    private int collectionSize;
     private ActivityMainBinding binding;
     private MyFragmentAdapter adapter;
     private final Bundle bundleFragment = new Bundle();
+    private InitialBaseCell initialBaseCell;
+
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case MSG_INITIAL_BASIC_COLLECTION:
+                    showProgress(false);
+                    inputScreenGone();
+                    return true;
+                case MSG_SHOW_RESULT:
+                    DataCell dataCell = (DataCell) msg.obj;
+                    CollectionFragment fragment = FragmentManager.findFragment(findViewById(R.id.fragment_collection));
+                    CellView cellView = fragment.getCellViewMap().get(dataCell.getViewKey());
+                    if (cellView != null) {
+                        cellView.showResult(dataCell);
+                    }
+                    return true;
+            }
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +66,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.includeInputLayout.btnCalculate.setOnClickListener(this);
         binding.includeInputLayout.texInputET.setOnEditorActionListener(this);
 
+        if (savedInstanceState != null) {
+            binding.viewPager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
+            binding.pbCalculate.progressLayout.setVisibility(savedInstanceState.getInt(KEY_PROGRESS_VISIBLE));
+        }
+
         FragmentManager fm = getSupportFragmentManager();
 
-        if (savedInstanceState != null) {
-            inputScreenGone();
-            binding.viewPager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
-        }
-        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment);
+        bundleFragment.putInt(COLLECTION_SIZE, collectionSize);
+
+        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment, handler);
         binding.viewPager2.setAdapter(adapter);
         binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -63,8 +89,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Log.d(LOG_TAG, "Button clicked");
-        inputProcessing(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
-        inputScreenGone();
+        getCollectionSizeFromInput();
+        showProgress(true);
+        initialBaseCell = InitialBaseCell.getInstance(collectionSize, handler);
     }
 
     @Override
@@ -81,16 +108,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        getCollectionSizeFromInput();
+        return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        binding = null;
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle savedInstanceSave) {
         super.onSaveInstanceState(savedInstanceSave);
         int currentItem = binding.viewPager2.getCurrentItem();
+        int progressVisible = binding.pbCalculate.progressLayout.getVisibility();
         savedInstanceSave.putInt(CURRENT_POSITION, currentItem);
+        savedInstanceSave.putInt(KEY_PROGRESS_VISIBLE,progressVisible);
     }
 
-    private void inputProcessing(String inputString) {
-        collectionSize = String.valueOf(inputString);
-        bundleFragment.putString(COLLECTION_SIZE, collectionSize);
-        inputScreenGone();
+    private void getCollectionSizeFromInput() {
+        int value = Integer.parseInt(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
+        if (value == 0) {
+            Toast.makeText(this, "Incorrect value. Please enter a value greater than 0.", Toast.LENGTH_SHORT).show();
+        } else {
+            collectionSize = value;
+        }
+    }
+
+    private void showProgress(boolean visible) {
+        if (visible) {
+            binding.pbCalculate.progressLayout.setVisibility(View.VISIBLE);
+        } else {
+            binding.pbCalculate.progressLayout.setVisibility(View.GONE);
+        }
     }
 
     private void inputScreenGone() {
@@ -98,15 +150,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.viewPager2.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        inputProcessing(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
-        return false;
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null;
-    }
+    /**
+     * - инициализируем базовую коллекцию в MainActivity, показываем прогресс общий
+     * - передаём базовую коллекцию во фрагменты
+     * - в фрагментах происходит наполнение базы List-ов или Map-ов:
+     * - в каждом объекте ячейки с данными инициализируеться коллекция для выполнения задания,
+     * заполняеться значениями из базовой коллекции
+     * - добавляеться КЛЮЧ по которому мы найдём ячейку
+     * - добавляется идентификатор Task, дял выполнения конкретных вычислений
+     *
+     * - После этого можно убрать прогресс общий и layout_input, и показать viewPager с фрагментами
+     * - Стартуем все вычисления
+     */
 }

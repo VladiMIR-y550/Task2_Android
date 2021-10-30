@@ -1,6 +1,7 @@
 package com.mironenko.task2_android;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,12 +11,14 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class MyFragmentAdapter extends FragmentStateAdapter {
-    public static final String LOG_TAG = "My Fragment Adapter";
-    Bundle bundle;
+    public final String LOG_TAG = "My Fragment Adapter";
+    private final Bundle bundle;
+    private final Handler handler;
 
-    public MyFragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, Bundle bundleFragment) {
+    public MyFragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, Bundle bundle, Handler handler) {
         super(fragmentManager, lifecycle);
-        this.bundle = bundleFragment;
+        this.bundle = bundle;
+        this.handler = handler;
     }
 
 
@@ -24,10 +27,10 @@ public class MyFragmentAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         if (position == 1) {
             Log.d(LOG_TAG, "Map fragment CREATED!");
-            return MapFragment.newInstance(bundle);
+//            return MapFragment.newInstance(handler);
         }
         Log.d(LOG_TAG, "Collection fragment CREATED!");
-        return CollectionFragment.newInstance(bundle);
+        return CollectionFragment.newInstance(bundle, handler);
     }
 
     @Override

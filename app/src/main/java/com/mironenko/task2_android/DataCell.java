@@ -1,14 +1,12 @@
 package com.mironenko.task2_android;
 
-import com.mironenko.task2_android.NamesCollections;
-import com.mironenko.task2_android.TasksList;
-
 import java.util.List;
 
 public class DataCell {
 
     private long timeComplete;
-    private int viewId;
+    private boolean calculated = false;
+    private CellViewKeys viewKey;
     private final TasksList task;
     private final NamesCollections namesCollections;
     private List<Integer> testCollection;
@@ -27,12 +25,12 @@ public class DataCell {
         this.timeComplete = timeComplete;
     }
 
-    public int getViewId() {
-        return viewId;
+    public CellViewKeys getViewKey() {
+        return viewKey;
     }
 
-    public void setViewId(int viewId) {
-        this.viewId = viewId;
+    public void setViewKey(CellViewKeys viewKey) {
+        this.viewKey = viewKey;
     }
 
     public TasksList getTask() {
@@ -49,5 +47,13 @@ public class DataCell {
 
     public NamesCollections getNamesCollections() {
         return namesCollections;
+    }
+
+    public boolean isCalculated() {
+        return calculated;
+    }
+
+    public void setCalculated(boolean calculated) {
+        this.calculated = calculated;
     }
 }

@@ -17,9 +17,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class CellView extends FrameLayout {
     private static final String LOG_TAG = "CellView";
-    private final int CELL_VISIBLE = 0;
-    private final int CELL_INVISIBLE = 1;
-    private final int CELL_GONE = 2;
+    private final boolean CELL_VISIBLE = true;
+    private final boolean CELL_GONE = false;
     private ProgressBar progressBar;
     private TextInputLayout textInputLayout;
     private TextInputEditText textInputEditText;
@@ -45,50 +44,28 @@ public class CellView extends FrameLayout {
         progressBar = view.findViewById(R.id.progress_circular);
         textInputLayout = view.findViewById(R.id.til_progressItem);
         textInputEditText = view.findViewById(R.id.et_progress_item);
-        this.addView(view);
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CellView);
             try {
                 String cellHintFromAttr = typedArray.getString(R.styleable.CellView_cellHint);
                 textInputLayout.setHint(cellHintFromAttr);
-                int cellVisibleFromAttr = typedArray.getInt(R.styleable.CellView_cellVisibility, CELL_VISIBLE);
+                boolean cellVisibleFromAttr = typedArray.getBoolean(R.styleable.CellView_cellVisibility, CELL_GONE);
                 setProgressVisible(cellVisibleFromAttr);
                 String cellTextFromAttr = typedArray.getString(R.styleable.CellView_cellText);
-                setResult(cellTextFromAttr);
+                textInputEditText.setText(cellTextFromAttr != null ? cellTextFromAttr : " ");
             } finally {
                 typedArray.recycle();
             }
         }
+        this.addView(view);
     }
 
-    private void setProgressVisible(int visible) {
-        switch (visible) {
-            case CELL_VISIBLE:
-                progressBar.setVisibility(VISIBLE);
-                break;
-            case CELL_INVISIBLE:
-                progressBar.setVisibility(INVISIBLE);
-                break;
-            case CELL_GONE:
-                progressBar.setVisibility(GONE);
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * setText используется для записи в ячейку либо пустого значения - для поднятия hint в верх,
-     * либо результата из параметров.
-     * @param result
-     */
-    private void setResult(String result) {
-        if (result == null) {
-            textInputEditText.setText(" ");
+    private void setProgressVisible(boolean visible) {
+        if (visible == CELL_VISIBLE) {
+            progressBar.setVisibility(VISIBLE);
         } else {
-            textInputEditText.setText(result);
+            progressBar.setVisibility(GONE);
         }
-        this.invalidate();
     }
 
     public void showResult(DataCell dataCell) {
@@ -100,7 +77,7 @@ public class CellView extends FrameLayout {
         Log.d(LOG_TAG, "result = " + dataCell.getTimeComplete());
     }
 
-    public void showProgress(DataCell dataCell) {
+    public void showProgress() {
         setProgressVisible(CELL_VISIBLE);
     }
 }

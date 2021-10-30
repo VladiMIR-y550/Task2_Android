@@ -1,6 +1,6 @@
 package com.mironenko.task2_android;
 
-import static com.mironenko.task2_android.CollectionFragment.MSG_START_JOB;
+import static com.mironenko.task2_android.MainActivity.MSG_INITIAL_BASIC_COLLECTION;
 
 import android.os.Handler;
 import android.util.Log;
@@ -14,19 +14,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class InitialBaseCell {
     private static final String LOG_TAG = "InitialBaseCell";
     private static InitialBaseCell initialBaseCell;
-    private final String collectionSize;
-    List<Integer> basicList = new ArrayList<>();
     private final List<DataCell> dataCellList;
+    private final int collectionSize;
     private final Handler handler;
+    Thread initialBasicList;
 
-    private InitialBaseCell(String collectionSize, Handler handler) {
+
+    private InitialBaseCell(int collectionSize, Handler handler) {
         this.collectionSize = collectionSize;
         this.handler = handler;
         dataCellList = new ArrayList<>();
-        initialBasicList(handler);
+//        initialBasicList(collectionSize, handler);
+        initialBasicList = new Thread(initial);
+        initialBasicList.start();
     }
 
-    public static InitialBaseCell getInitialBaseCell(String collectionSize, Handler handler) {
+    public static InitialBaseCell getInstance(int collectionSize, Handler handler) {
         if (initialBaseCell == null) {
             initialBaseCell = new InitialBaseCell(collectionSize, handler);
         }
@@ -37,21 +40,23 @@ public class InitialBaseCell {
         return dataCellList;
     }
 
-    private void initialBasicList(Handler handler) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int size = Integer.parseInt(collectionSize);
-                Integer[] array = new Integer[size];
-                Arrays.fill(array, 1);
-                basicList = Arrays.asList(array);
-                Log.d(LOG_TAG, "basicList = " + basicList.size());
-                fillObjectsData(dataCellList, basicList);
-                bindId(dataCellList);
-                handler.sendEmptyMessage(MSG_START_JOB);
+    Runnable initial = new Runnable() {
+        @Override
+        public void run() {
+            Integer[] array = new Integer[collectionSize];
+            Arrays.fill(array, 1);
+            List<Integer> basicList = Arrays.asList(array);
+            Log.d(LOG_TAG, "basicList = " + basicList.size());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }).start();
-    }
+            fillObjectsData(dataCellList, basicList);
+            bindKey(dataCellList);
+            handler.sendEmptyMessage(MSG_INITIAL_BASIC_COLLECTION);
+        }
+    };
 
     private void fillObjectsData(List<DataCell> dataCellList, List<Integer> basicList) {
         for (TasksList task : TasksList.values()) {
@@ -63,24 +68,26 @@ public class InitialBaseCell {
         }
     }
 
-    private void bindId(List<DataCell> dataCellList) {
-        CellViewId[] cellViewIds = CellViewId.values();
-        for (int i = 0; i < cellViewIds.length; i++) {
-            dataCellList.get(i).setViewId(cellViewIds[i].getCellViewId());
-        }
-    }
-
     private void createCollectionForTest(DataCell dataCell, List<Integer> basicList) {
         switch (dataCell.getNamesCollections()) {
             case ARRAY_LIST:
                 dataCell.setTestCollection(new ArrayList<>(basicList));
+                break;
             case LINKED_LIST:
                 dataCell.setTestCollection(new LinkedList<>(basicList));
+                break;
             case COPY_ON_WRITE_ARRAY_LIST:
                 dataCell.setTestCollection(new CopyOnWriteArrayList<>(basicList));
                 break;
             default:
                 break;
+        }
+    }
+
+    public void bindKey(List<DataCell> dataCellList) {
+        CellViewKeys[] cellViewKeys = CellViewKeys.values();
+        for (int i = 0; i < cellViewKeys.length; i++) {
+            dataCellList.get(i).setViewKey(cellViewKeys[i]);
         }
     }
 }

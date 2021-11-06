@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyFragmentAdapter adapter;
     private final Bundle bundleFragment = new Bundle();
     private InitialBaseCell initialBaseCell;
+    private MainState mainState;
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -62,14 +62,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        mainState = StateManager.getState(this, new MainState());
         binding.tabLayout.addOnTabSelectedListener(this);
         binding.includeInputLayout.btnCalculate.setOnClickListener(this);
         binding.includeInputLayout.texInputET.setOnEditorActionListener(this);
 
         if (savedInstanceState != null) {
             binding.viewPager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
-            binding.pbCalculate.progressLayout.setVisibility(savedInstanceState.getInt(KEY_PROGRESS_VISIBLE));
+            handler = mainState.mainHandler;
+            int progressVisible = savedInstanceState.getInt(KEY_PROGRESS_VISIBLE);
+            if (progressVisible == View.VISIBLE) {
+                binding.pbCalculate.progressLayout.setVisibility(progressVisible);
+            }
+//            binding.pbCalculate.progressLayout.setVisibility(savedInstanceState.getInt(KEY_PROGRESS_VISIBLE));
+        } else {
+
         }
+
 
         FragmentManager fm = getSupportFragmentManager();
 
@@ -122,19 +131,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle savedInstanceSave) {
         super.onSaveInstanceState(savedInstanceSave);
-        int currentItem = binding.viewPager2.getCurrentItem();
+//        int currentItem = binding.viewPager2.getCurrentItem();
+//        savedInstanceSave.putInt(CURRENT_POSITION, currentItem);
+        mainState.mainHandler = handler;
+
+//        int currentItem = binding.viewPager2.getCurrentItem();
+        mainState.currentItem = binding.viewPager2.getCurrentItem();
         int progressVisible = binding.pbCalculate.progressLayout.getVisibility();
-        savedInstanceSave.putInt(CURRENT_POSITION, currentItem);
-        savedInstanceSave.putInt(KEY_PROGRESS_VISIBLE,progressVisible);
+        mainState.progressVisible = binding.pbCalculate.progressLayout.getVisibility();
+
+        savedInstanceSave.putInt(CURRENT_POSITION, mainState.currentItem);
+        savedInstanceSave.putInt(KEY_PROGRESS_VISIBLE,mainState.progressVisible);
     }
 
+
     private void getCollectionSizeFromInput() {
-        int value = Integer.parseInt(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
-        if (value == 0) {
-            Toast.makeText(this, "Incorrect value. Please enter a value greater than 0.", Toast.LENGTH_SHORT).show();
-        } else {
-            collectionSize = value;
-        }
+        collectionSize = Integer.parseInt(Objects.requireNonNull(binding.includeInputLayout.texInputET.getText()).toString());
     }
 
     private void showProgress(boolean visible) {

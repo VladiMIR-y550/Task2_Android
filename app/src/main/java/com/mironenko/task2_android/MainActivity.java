@@ -22,12 +22,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TabLayout.OnTabSelectedListener,
         TextView.OnEditorActionListener {
 
-    private static final String KEY_PROGRESS_VISIBLE = "progressVisible";
     public final String LOG_TAG = "myLog Activity";
     public final String CURRENT_POSITION = "currentPosition";
     public static final String COLLECTION_SIZE = "collectionSize";
     public static final int MSG_INITIAL_BASIC_COLLECTION = 0;
     private static final int MSG_SHOW_RESULT = 1;
+    private static final String KEY_INPUT_LAYOUT_VISIBLE = "inputLayoutVisible";
+    private static final String KEY_VIEW_PAGER_VISIBLE = "viewPagerVisible";
+    private static final String KEY_PROGRESS_VISIBLE = "progressVisible";
     private int collectionSize;
     private ActivityMainBinding binding;
     private MyFragmentAdapter adapter;
@@ -68,18 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.includeInputLayout.texInputET.setOnEditorActionListener(this);
 
         if (savedInstanceState != null) {
-            binding.viewPager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
-            handler = mainState.mainHandler;
-            int progressVisible = savedInstanceState.getInt(KEY_PROGRESS_VISIBLE);
-            if (progressVisible == View.VISIBLE) {
-                binding.pbCalculate.progressLayout.setVisibility(progressVisible);
-            }
-//            binding.pbCalculate.progressLayout.setVisibility(savedInstanceState.getInt(KEY_PROGRESS_VISIBLE));
-        } else {
-
+            restoreBundle(savedInstanceState);
         }
-
-
         FragmentManager fm = getSupportFragmentManager();
 
         bundleFragment.putInt(COLLECTION_SIZE, collectionSize);
@@ -131,17 +123,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle savedInstanceSave) {
         super.onSaveInstanceState(savedInstanceSave);
-//        int currentItem = binding.viewPager2.getCurrentItem();
-//        savedInstanceSave.putInt(CURRENT_POSITION, currentItem);
-        mainState.mainHandler = handler;
 
-//        int currentItem = binding.viewPager2.getCurrentItem();
-        mainState.currentItem = binding.viewPager2.getCurrentItem();
-        int progressVisible = binding.pbCalculate.progressLayout.getVisibility();
-        mainState.progressVisible = binding.pbCalculate.progressLayout.getVisibility();
-
-        savedInstanceSave.putInt(CURRENT_POSITION, mainState.currentItem);
-        savedInstanceSave.putInt(KEY_PROGRESS_VISIBLE,mainState.progressVisible);
+        savedInstanceSave.putInt(CURRENT_POSITION, binding.viewPager2.getCurrentItem());
+        savedInstanceSave.putInt(KEY_PROGRESS_VISIBLE, binding.pbCalculate.progressLayout.getVisibility());
+        savedInstanceSave.putInt(KEY_INPUT_LAYOUT_VISIBLE, binding.includeInputLayout.layoutInput.getVisibility());
+        savedInstanceSave.putInt(KEY_VIEW_PAGER_VISIBLE, binding.viewPager2.getVisibility());
     }
 
 
@@ -162,17 +148,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.viewPager2.setVisibility(View.VISIBLE);
     }
 
-
-    /**
-     * - инициализируем базовую коллекцию в MainActivity, показываем прогресс общий
-     * - передаём базовую коллекцию во фрагменты
-     * - в фрагментах происходит наполнение базы List-ов или Map-ов:
-     * - в каждом объекте ячейки с данными инициализируеться коллекция для выполнения задания,
-     * заполняеться значениями из базовой коллекции
-     * - добавляеться КЛЮЧ по которому мы найдём ячейку
-     * - добавляется идентификатор Task, дял выполнения конкретных вычислений
-     *
-     * - После этого можно убрать прогресс общий и layout_input, и показать viewPager с фрагментами
-     * - Стартуем все вычисления
-     */
+    private void restoreBundle(Bundle savedInstanceState) {
+        binding.viewPager2.setCurrentItem(savedInstanceState.getInt(CURRENT_POSITION));
+        if (savedInstanceState.getInt(KEY_PROGRESS_VISIBLE) == View.VISIBLE) {
+            binding.pbCalculate.progressLayout.setVisibility(savedInstanceState.getInt(KEY_PROGRESS_VISIBLE));
+        } else if (savedInstanceState.getInt(KEY_INPUT_LAYOUT_VISIBLE) != View.VISIBLE) {
+            showProgress(false);
+            inputScreenGone();
+        }
+    }
 }

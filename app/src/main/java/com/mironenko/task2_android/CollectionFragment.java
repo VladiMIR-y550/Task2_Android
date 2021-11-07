@@ -10,23 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.mironenko.task2_android.databinding.FragmentCollectionBinding;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CollectionFragment extends Fragment {
     private static final String LOG_TAG = "MyFragment log";
-    public static final int MSG_START_JOB = 0;
     public static final int MSG_SHOW_RESULT = 1;
     private static final String KEY_BUNDLE_OK = "bundle";
-
-
     private int collectionSize;
     private List<DataCell> dataCellList;
     private Map<CellViewKeys, CellView> cellViewMap = new HashMap<>();
@@ -34,8 +29,6 @@ public class CollectionFragment extends Fragment {
     private final Handler handler;
     private Calculator calculator;
     InitialBaseCell initialBaseCell;
-
-    private List<Integer> basicCollection = new ArrayList<>();
 
     public Map<CellViewKeys, CellView> getCellViewMap() {
         return cellViewMap;
@@ -57,9 +50,7 @@ public class CollectionFragment extends Fragment {
         setRetainInstance(true);
         if (getArguments() != null) {
             collectionSize = getArguments().getInt(COLLECTION_SIZE);
-        }
-
-        if (savedInstanceState != null) {
+        } else if (savedInstanceState != null) {
             updateKey();
         }
         initialBaseCell = InitialBaseCell.getInstance(collectionSize, handler);
@@ -118,6 +109,7 @@ public class CollectionFragment extends Fragment {
         }
         calculator.calculate();
     }
+
     private void updateKey(){
         initialBaseCell.bindKey(dataCellList);
     }
@@ -126,10 +118,5 @@ public class CollectionFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putBoolean(KEY_BUNDLE_OK, true);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
     }
 }

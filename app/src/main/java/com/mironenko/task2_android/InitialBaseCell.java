@@ -54,7 +54,6 @@ public class InitialBaseCell {
             }
             fillObjectsData(dataCellList, basicList);
             bindKey(dataCellList);
-
             handler.sendEmptyMessage(MSG_INITIAL_BASIC_COLLECTION);
         }
     };

@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyFragmentAdapter adapter;
     private final Bundle bundleFragment = new Bundle();
     private InitialBaseCell initialBaseCell;
-    private MainState mainState;
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        mainState = StateManager.getState(this, new MainState());
         binding.tabLayout.addOnTabSelectedListener(this);
         binding.includeInputLayout.btnCalculate.setOnClickListener(this);
         binding.includeInputLayout.texInputET.setOnEditorActionListener(this);

@@ -7,30 +7,39 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 
-public class MyJob extends Thread{
+public class MyJob extends Thread {
     private static final String LOG_TAG = "MyThreadJob";
-    private final Handler handler;
+    private Handler handler;
     private final DataCell dataCell;
 
-    public MyJob(Handler handler, DataCell dataCell) {
-        this.handler = handler;
+    public MyJob(DataCell dataCell) {
         this.dataCell = dataCell;
-
     }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public void run() {
         super.run();
-        Log.d(LOG_TAG, "Thread start = " + Thread.currentThread().getName());
+        Log.d(LOG_TAG, "Thread START = " + Thread.currentThread().getName());
         long result = startCalculate(dataCell);
         dataCell.setTimeComplete(result);
         dataCell.setCalculated(true);
         Log.d(LOG_TAG, "" + Thread.currentThread().getName() + " CollectionName "
                 + dataCell.getNamesCollections() + " Task "
                 + dataCell.getTask() + " Result = " + result);
-        Message msg = Message.obtain();
-        msg.what = MSG_SHOW_RESULT;
-        msg.obj = dataCell;
-        handler.sendMessage(msg);
+
+        if (handler != null) {
+            Message msg = Message.obtain();
+            msg.what = MSG_SHOW_RESULT;
+            msg.obj = dataCell;
+            handler.sendMessage(msg);
+            Thread.currentThread().interrupt();
+            Log.d(LOG_TAG, "Thread STOP = " + Thread.currentThread().getName());
+        }
+//        this.start();
     }
 
     public long startCalculate(DataCell dataCell) {

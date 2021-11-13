@@ -15,25 +15,30 @@ public class InitialBaseCell {
     private static final String LOG_TAG = "InitialBaseCell";
     private static InitialBaseCell initialBaseCell;
     private final List<DataCell> dataCellList;
-    private final int collectionSize;
-    private final Handler handler;
+    private int collectionSize;
+    private Handler handler;
     Thread initialBasicList;
+    private final CellViewKeys[] cellViewKeys = CellViewKeys.values();
 
 
-    private InitialBaseCell(int collectionSize, Handler handler) {
-        this.collectionSize = collectionSize;
-        this.handler = handler;
+    private InitialBaseCell() {
         dataCellList = new ArrayList<>();
 //        initialBasicList(collectionSize, handler);
-        initialBasicList = new Thread(initial);
-        initialBasicList.start();
     }
 
-    public static InitialBaseCell getInstance(int collectionSize, Handler handler) {
+    public static InitialBaseCell getInstance() {
         if (initialBaseCell == null) {
-            initialBaseCell = new InitialBaseCell(collectionSize, handler);
+            initialBaseCell = new InitialBaseCell();
         }
         return initialBaseCell;
+    }
+
+    public void setCollectionSize(int collectionSize) {
+        this.collectionSize = collectionSize;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     public List<DataCell> getDataCellList() {
@@ -54,7 +59,9 @@ public class InitialBaseCell {
             }
             fillObjectsData(dataCellList, basicList);
             bindKey(dataCellList);
-            handler.sendEmptyMessage(MSG_INITIAL_BASIC_COLLECTION);
+            if (handler != null) {
+                handler.sendEmptyMessage(MSG_INITIAL_BASIC_COLLECTION);
+            }
         }
     };
 
@@ -85,9 +92,13 @@ public class InitialBaseCell {
     }
 
     public void bindKey(List<DataCell> dataCellList) {
-        CellViewKeys[] cellViewKeys = CellViewKeys.values();
+
         for (int i = 0; i < cellViewKeys.length; i++) {
             dataCellList.get(i).setViewKey(cellViewKeys[i]);
         }
+    }
+    public void initialBasicList() {
+        initialBasicList = new Thread(initial);
+        initialBasicList.start();
     }
 }

@@ -1,19 +1,22 @@
 package com.mironenko.task2_android;
 
 
-import static com.mironenko.task2_android.MainActivity.COLLECTION_SIZE;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.mironenko.task2_android.databinding.FragmentCollectionBinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,56 +25,121 @@ public class CollectionFragment extends Fragment {
     private static final String LOG_TAG = "MyFragment log";
     public static final int MSG_SHOW_RESULT = 1;
     private static final String KEY_BUNDLE_OK = "bundle";
-    private int collectionSize;
-    private List<DataCell> dataCellList;
+    private List<DataCell> dataCellList = new ArrayList<>();
     private Map<CellViewKeys, CellView> cellViewMap = new HashMap<>();
     private FragmentCollectionBinding bindingCollection;
-    private final Handler handler;
+    private Handler collectionHandler;
     private Calculator calculator;
-    InitialBaseCell initialBaseCell;
 
     public Map<CellViewKeys, CellView> getCellViewMap() {
         return cellViewMap;
     }
 
-    private CollectionFragment(Handler handler) {
-        this.handler = handler;
+    public static CollectionFragment newInstance() {
+        return new CollectionFragment();
     }
 
-    public static CollectionFragment newInstance(Bundle args, Handler handler) {
-        CollectionFragment fragment = new CollectionFragment(handler);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        Log.d(LOG_TAG, "onAttach fragment");
+        super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreate fragment");
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        if (getArguments() != null) {
-            collectionSize = getArguments().getInt(COLLECTION_SIZE);
-        } else if (savedInstanceState != null) {
-            updateKey();
+
+        if (savedInstanceState != null) {
+//            updateKey();
         }
-        initialBaseCell = InitialBaseCell.getInstance(collectionSize, handler);
+        InitialBaseCell initialBaseCell = InitialBaseCell.getInstance();
         dataCellList = initialBaseCell.getDataCellList();
-        calculator = Calculator.getInstance(dataCellList, handler, cellViewMap);
+        calculator = Calculator.getInstance();
+        calculator.setCellViewMap(cellViewMap);
+        calculator.setDataCellList(dataCellList);
+        collectionHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                DataCell dataCell = (DataCell) msg.obj;
+                CellView cellView = cellViewMap.get(dataCell.getViewKey());
+                if (cellView != null) {
+                    cellView.showResult(dataCell);
+                    return true;
+                }
+                return false;
+            }
+        });
+        calculator.setHandler(collectionHandler);
+        if (!calculator.isCalculationStart()) {
+            calculator.calculate();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreateView fragment");
+
         bindingCollection = FragmentCollectionBinding.inflate(inflater, container, false);
         View view = bindingCollection.getRoot();
         cellViewMap = createViewList();
         checkTaskCalculated(dataCellList, cellViewMap);
+
         return view;
     }
 
     @Override
+    public void onStart() {
+        Log.d(LOG_TAG, "onStart fragment");
+        super.onStart();
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onViewStateRestored fragment");
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(LOG_TAG, "onResume fragment");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(LOG_TAG, "onPause fragment");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.d(LOG_TAG, "onStop fragment");
+
+        super.onStop();
+    }
+
+    @Override
+    public void setInitialSavedState(@Nullable SavedState state) {
+        Log.d(LOG_TAG, "setInitialSavedState fragment");
+
+        super.setInitialSavedState(state);
+    }
+
+    @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        Log.d(LOG_TAG, "onDestroyView fragment");
+
         bindingCollection = null;
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d(LOG_TAG, "onDetach fragment");
+
+        super.onDetach();
     }
 
     private Map<CellViewKeys, CellView> createViewList() {
@@ -100,6 +168,12 @@ public class CollectionFragment extends Fragment {
         return viewMap;
     }
 
+    @Override
+    public void onDestroy() {
+        collectionHandler = null;
+        super.onDestroy();
+    }
+
     private void checkTaskCalculated(List<DataCell> dataCellList, Map<CellViewKeys, CellView> viewMap) {
         for (DataCell dataCell : dataCellList) {
             if (!dataCell.isCalculated()) {
@@ -107,10 +181,12 @@ public class CollectionFragment extends Fragment {
                 cellView.showProgress();
             }
         }
-        calculator.calculate();
+//        calculator.calculate();
     }
 
-    private void updateKey(){
+    private void updateKey() {
+        InitialBaseCell initialBaseCell = InitialBaseCell.getInstance();
+        dataCellList = initialBaseCell.getDataCellList();
         initialBaseCell.bindKey(dataCellList);
     }
 

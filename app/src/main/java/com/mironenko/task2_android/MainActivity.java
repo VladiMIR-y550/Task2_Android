@@ -35,27 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyFragmentAdapter adapter;
     private final Bundle bundleFragment = new Bundle();
     private InitialBaseCell initialBaseCell;
-
-    Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case MSG_INITIAL_BASIC_COLLECTION:
-                    showProgress(false);
-                    inputScreenGone();
-                    return true;
-                case MSG_SHOW_RESULT:
-                    DataCell dataCell = (DataCell) msg.obj;
-                    CollectionFragment fragment = FragmentManager.findFragment(findViewById(R.id.fragment_collection));
-                    CellView cellView = fragment.getCellViewMap().get(dataCell.getViewKey());
-                    if (cellView != null) {
-                        cellView.showResult(dataCell);
-                    }
-                    return true;
-            }
-            return false;
-        }
-    });
+    private Handler mainHandler;
+    private CollectionFragment collectionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +44,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        collectionFragment = CollectionFragment.newInstance();
+        initialBaseCell = InitialBaseCell.getInstance();
+        mainHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                switch (msg.what) {
+                    case MSG_INITIAL_BASIC_COLLECTION:
+                        showProgress(false);
+                        inputScreenGone();
+                        return true;
+//                case MSG_SHOW_RESULT:
+//                    DataCell dataCell = (DataCell) msg.obj;
+//                    CollectionFragment fragment = FragmentManager.findFragment(findViewById(R.id.fragment_collection));
+//                    CellView cellView = fragment.getCellViewMap().get(dataCell.getViewKey());
+//                    if (cellView != null) {
+//                        cellView.showResult(dataCell);
+//                    }
+//                    return true;
+                }
+                return false;
+            }
+        });
+        initialBaseCell.setHandler(mainHandler);
+
         binding.tabLayout.addOnTabSelectedListener(this);
         binding.includeInputLayout.btnCalculate.setOnClickListener(this);
         binding.includeInputLayout.texInputET.setOnEditorActionListener(this);
@@ -71,10 +77,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             restoreBundle(savedInstanceState);
         }
         FragmentManager fm = getSupportFragmentManager();
-
         bundleFragment.putInt(COLLECTION_SIZE, collectionSize);
 
-        adapter = new MyFragmentAdapter(fm, getLifecycle(), bundleFragment, handler);
+//        MapFragment mapFragment = MapFragment.newInstance(bundleFragment);
+        adapter = new MyFragmentAdapter(fm, getLifecycle());
+        adapter.addFragment(collectionFragment);
+//        adapter.addFragment(mapFragment);
+
+
         binding.viewPager2.setAdapter(adapter);
         binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -89,8 +99,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         Log.d(LOG_TAG, "Button clicked");
         getCollectionSizeFromInput();
+        initialBaseCell.setCollectionSize(collectionSize);
         showProgress(true);
-        initialBaseCell = InitialBaseCell.getInstance(collectionSize, handler);
+        initialBaseCell.initialBasicList();
     }
 
     @Override
@@ -116,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
 //        binding = null;
+        mainHandler = null;
     }
 
     @Override

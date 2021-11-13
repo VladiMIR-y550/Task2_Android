@@ -69,6 +69,9 @@ public class CellView extends FrameLayout {
     }
 
     public void showResult(DataCell dataCell) {
+        /**
+         * TODO if(dataCell.getTimeComplete() != null)
+         */
         String result;
         setProgressVisible(CELL_GONE);
         result = String.valueOf(dataCell.getTimeComplete());

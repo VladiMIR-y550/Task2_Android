@@ -1,7 +1,6 @@
 package com.mironenko.task2_android;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.mironenko.task2_android.databinding.FragmentCollectionBinding;
@@ -31,18 +29,8 @@ public class CollectionFragment extends Fragment {
     private Handler collectionHandler;
     private Calculator calculator;
 
-    public Map<CellViewKeys, CellView> getCellViewMap() {
-        return cellViewMap;
-    }
-
     public static CollectionFragment newInstance() {
         return new CollectionFragment();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        Log.d(LOG_TAG, "onAttach fragment");
-        super.onAttach(context);
     }
 
     @Override
@@ -51,12 +39,11 @@ public class CollectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-//            updateKey();
+            updateKey();
         }
         InitialBaseCell initialBaseCell = InitialBaseCell.getInstance();
         dataCellList = initialBaseCell.getDataCellList();
         calculator = Calculator.getInstance();
-        calculator.setCellViewMap(cellViewMap);
         calculator.setDataCellList(dataCellList);
         collectionHandler = new Handler(new Handler.Callback() {
             @Override
@@ -83,66 +70,20 @@ public class CollectionFragment extends Fragment {
 
         bindingCollection = FragmentCollectionBinding.inflate(inflater, container, false);
         View view = bindingCollection.getRoot();
-        cellViewMap = createViewList();
+        cellViewMap = createViewMap();
+
         checkTaskCalculated(dataCellList, cellViewMap);
 
         return view;
     }
-
-    @Override
-    public void onStart() {
-        Log.d(LOG_TAG, "onStart fragment");
-        super.onStart();
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onViewStateRestored fragment");
-        super.onViewStateRestored(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        Log.d(LOG_TAG, "onResume fragment");
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        Log.d(LOG_TAG, "onPause fragment");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        Log.d(LOG_TAG, "onStop fragment");
-
-        super.onStop();
-    }
-
-    @Override
-    public void setInitialSavedState(@Nullable SavedState state) {
-        Log.d(LOG_TAG, "setInitialSavedState fragment");
-
-        super.setInitialSavedState(state);
-    }
-
     @Override
     public void onDestroyView() {
         Log.d(LOG_TAG, "onDestroyView fragment");
-
-        bindingCollection = null;
         super.onDestroyView();
     }
 
-    @Override
-    public void onDetach() {
-        Log.d(LOG_TAG, "onDetach fragment");
 
-        super.onDetach();
-    }
-
-    private Map<CellViewKeys, CellView> createViewList() {
+    private Map<CellViewKeys, CellView> createViewMap() {
         Map<CellViewKeys, CellView> viewMap = new HashMap<>();
         viewMap.put(CellViewKeys.CELL_ADDING_BEGIN_ARRAY_LIST, bindingCollection.cellArrayListAddingBegin);
         viewMap.put(CellViewKeys.CELL_ADDING_BEGIN_LINKED_LIST, bindingCollection.cellLinkedListAddingBegin);
@@ -170,18 +111,22 @@ public class CollectionFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        Log.d(LOG_TAG, "onDestroy fragment");
+        bindingCollection = null;
         collectionHandler = null;
         super.onDestroy();
     }
 
     private void checkTaskCalculated(List<DataCell> dataCellList, Map<CellViewKeys, CellView> viewMap) {
         for (DataCell dataCell : dataCellList) {
-            if (!dataCell.isCalculated()) {
+            if (!dataCell.isCalculated() && dataCell.getTimeComplete() == null) {
                 CellView cellView = viewMap.get(dataCell.getViewKey());
                 cellView.showProgress();
+            } else if (dataCell.getTimeComplete() != null){
+                CellView cellView = viewMap.get(dataCell.getViewKey());
+                cellView.showResult(dataCell);
             }
         }
-//        calculator.calculate();
     }
 
     private void updateKey() {

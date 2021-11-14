@@ -25,11 +25,13 @@ public class CellView extends FrameLayout {
 
     public CellView(@NonNull Context context) {
         super(context);
+        Log.d("CellView CONSTRUCTOR", "attr = null");
         initView(context, null);
     }
 
     public CellView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        Log.d("CellView CONSTRUCTOR", "attr = !=null");
         initView(context, attrs);
 
     }
@@ -69,9 +71,6 @@ public class CellView extends FrameLayout {
     }
 
     public void showResult(DataCell dataCell) {
-        /**
-         * TODO if(dataCell.getTimeComplete() != null)
-         */
         String result;
         setProgressVisible(CELL_GONE);
         result = String.valueOf(dataCell.getTimeComplete());

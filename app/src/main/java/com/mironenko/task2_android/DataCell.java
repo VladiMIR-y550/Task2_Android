@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DataCell {
 
-    private long timeComplete;
+    private String timeComplete;
     private boolean calculated = false;
     private CellViewKeys viewKey;
     private final TasksList task;
@@ -17,11 +17,11 @@ public class DataCell {
         this.namesCollections = namesCollections;
     }
 
-    public long getTimeComplete() {
+    public String getTimeComplete() {
         return timeComplete;
     }
 
-    public void setTimeComplete(long timeComplete) {
+    public void setTimeComplete(String timeComplete) {
         this.timeComplete = timeComplete;
     }
 

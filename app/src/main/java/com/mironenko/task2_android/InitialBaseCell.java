@@ -23,7 +23,6 @@ public class InitialBaseCell {
 
     private InitialBaseCell() {
         dataCellList = new ArrayList<>();
-//        initialBasicList(collectionSize, handler);
     }
 
     public static InitialBaseCell getInstance() {
@@ -92,7 +91,6 @@ public class InitialBaseCell {
     }
 
     public void bindKey(List<DataCell> dataCellList) {
-
         for (int i = 0; i < cellViewKeys.length; i++) {
             dataCellList.get(i).setViewKey(cellViewKeys[i]);
         }

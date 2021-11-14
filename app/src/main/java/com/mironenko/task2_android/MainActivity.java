@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public final String CURRENT_POSITION = "currentPosition";
     public static final String COLLECTION_SIZE = "collectionSize";
     public static final int MSG_INITIAL_BASIC_COLLECTION = 0;
-    private static final int MSG_SHOW_RESULT = 1;
     private static final String KEY_INPUT_LAYOUT_VISIBLE = "inputLayoutVisible";
     private static final String KEY_VIEW_PAGER_VISIBLE = "viewPagerVisible";
     private static final String KEY_PROGRESS_VISIBLE = "progressVisible";
@@ -50,19 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
-                switch (msg.what) {
-                    case MSG_INITIAL_BASIC_COLLECTION:
-                        showProgress(false);
-                        inputScreenGone();
-                        return true;
-//                case MSG_SHOW_RESULT:
-//                    DataCell dataCell = (DataCell) msg.obj;
-//                    CollectionFragment fragment = FragmentManager.findFragment(findViewById(R.id.fragment_collection));
-//                    CellView cellView = fragment.getCellViewMap().get(dataCell.getViewKey());
-//                    if (cellView != null) {
-//                        cellView.showResult(dataCell);
-//                    }
-//                    return true;
+                if (msg.what == MSG_INITIAL_BASIC_COLLECTION) {
+                    showProgress(false);
+                    inputScreenGone();
+                    return true;
                 }
                 return false;
             }
@@ -79,11 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentManager fm = getSupportFragmentManager();
         bundleFragment.putInt(COLLECTION_SIZE, collectionSize);
 
-//        MapFragment mapFragment = MapFragment.newInstance(bundleFragment);
         adapter = new MyFragmentAdapter(fm, getLifecycle());
         adapter.addFragment(collectionFragment);
-//        adapter.addFragment(mapFragment);
-
 
         binding.viewPager2.setAdapter(adapter);
         binding.viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -126,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        binding = null;
+        binding = null;
         mainHandler = null;
     }
 

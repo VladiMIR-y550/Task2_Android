@@ -24,7 +24,7 @@ public class MyJob extends Thread {
     public void run() {
         super.run();
         Log.d(LOG_TAG, "Thread START = " + Thread.currentThread().getName());
-        long result = startCalculate(dataCell);
+        String result = String.valueOf(startCalculate(dataCell));
         dataCell.setTimeComplete(result);
         dataCell.setCalculated(true);
         Log.d(LOG_TAG, "" + Thread.currentThread().getName() + " CollectionName "
@@ -39,7 +39,6 @@ public class MyJob extends Thread {
             Thread.currentThread().interrupt();
             Log.d(LOG_TAG, "Thread STOP = " + Thread.currentThread().getName());
         }
-//        this.start();
     }
 
     public long startCalculate(DataCell dataCell) {
